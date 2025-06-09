@@ -1,16 +1,21 @@
-// index.js
+const { nextISSTimesForMyLocation } = require('./iss');
 
+/**
+ * Prints flyover time data in a human-readable format.
+ */
+const printPassTimes = function(passTimes) {
+  for (const pass of passTimes) {
+    const datetime = new Date(0);
+    datetime.setUTCSeconds(pass.risetime);
+    const duration = pass.duration;
+    console.log(`Next pass at ${datetime} for ${duration} seconds!`);
+  }
+};
 
-// The code below is temporary and can be commented out.
-const { fetchISSFlyOverTimes } = require('./iss');
-
-const exampleCoords = { latitude: '49.27670', longitude: '-123.13000' };
-
-fetchISSFlyOverTimes(exampleCoords, (error, passTimes) => {
+nextISSTimesForMyLocation((error, passTimes) => {
   if (error) {
-    console.log("It didn't work!" , error);
-    return;
+    return console.log("It didn't work!", error);
   }
 
-  console.log('It worked! Returned flyover times:' , passTimes);
+  printPassTimes(passTimes);
 });
